@@ -1,3 +1,5 @@
+// 파일: index.js (안정성 강화 최종본)
+
 const express = require('express');
 const { Client } = require("@upstash/qstash");
 const { createResponseFormat, createCallbackWaitResponse } = require('./utils.js');
@@ -47,6 +49,12 @@ async function callGeminiForWaitMessage(userInput) {
             throw new Error(`Gemini WaitMsg Error (${response.status})`);
         }
         const data = await response.json();
+        
+        // [안전 코드] Gemini 응답 구조 확인
+        if (!data.candidates?.[0]?.content?.parts?.[0]?.text) {
+             console.error("Invalid response structure from Gemini API for wait message:", JSON.stringify(data, null, 2));
+             throw new Error("Gemini API returned an invalid or empty response for wait message.");
+        }
         return JSON.parse(data.candidates[0].content.parts[0].text).wait_text;
     } catch (error) {
         if (error.name === 'AbortError') { 
@@ -87,6 +95,13 @@ async function callGeminiForAnswer(userInput) {
             throw new Error(`Gemini API Error (${response.status}): ${errorBody}`);
         }
         const data = await response.json();
+
+        // [안전 코드] Gemini 응답 구조 확인
+        if (!data.candidates?.[0]?.content?.parts?.[0]?.text) {
+            console.error("Invalid response structure from Gemini API:", JSON.stringify(data, null, 2));
+            throw new Error("Gemini API returned an invalid or empty response. This could be due to safety settings or other API issues.");
+        }
+        
         return JSON.parse(data.candidates[0].content.parts[0].text);
     } catch (error) {
         if (error.name === 'AbortError') { throw new Error('Gemini API call timed out after 25 seconds.'); }
@@ -129,21 +144,37 @@ app.post('/skill', async (req, res) => {
 
 app.post('/api/process-job', async (req, res) => {
     console.log('[/api/process-job] Received job from QStash.');
+    const { userInput, callbackUrl } = req.body;
+
     try {
-        const { userInput, callbackUrl } = req.body;
         console.log(`[/api/process-job] Processing job for: "${userInput}"`);
         const aiResult = await callGeminiForAnswer(userInput);
         const finalResponse = createResponseFormat(aiResult.response_text, aiResult.follow_up_questions);
+        
         await fetch(callbackUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(finalResponse),
         });
+
         console.log('[/api/process-job] Job processed and callback sent successfully.');
         return res.status(200).send("Job processed successfully.");
+
     } catch (error) {
-        console.error("[/api/process-job] Error processing job:", error.message);
-        // 실패 시 카카오톡으로 에러 콜백을 보내는 로직 추가 가능 (선택 사항)
+        // [사용자 경험 개선] 에러 발생 시 사용자에게 실패 메시지 콜백 전송
+        console.error(`[/api/process-job] Error processing job for "${userInput}":`, error.message);
+        
+        if (callbackUrl) {
+            const errorResponse = createResponseFormat("죄송합니다, AI 답변 생성 중 오류가 발생했어요. 잠시 후 다시 시도해주세요. 😥", []);
+            await fetch(callbackUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(errorResponse),
+            }).catch(callbackError => {
+                console.error("[/api/process-job] Failed to send error callback:", callbackError.message);
+            });
+        }
+        
         return res.status(500).send("Failed to process job.");
     }
 });
