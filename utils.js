@@ -7,7 +7,7 @@ const createResponseFormat = (mainText, questions) => {
         { simpleText: { text: mainText } },
         ...(safeQuestions.length > 0 ? [{
           listCard: {
-            header: { title: "이런 점도 궁금하신가요? 🤖" },
+            header: { title: "💬 이런 것이 궁금해요" },
             items: safeQuestions.map(q => ({
               title: q,
               action: 'message',
