@@ -87,7 +87,7 @@ You are a helpful assistant that creates a short, reassuring waiting message bas
 
 **Example JSON Output:**
 {
-  "wait_text": "아기 열에 관한 질문을 확인했어요. 잠시만 기다려주세요."
+  "wait_text": "아기가 열이 나서 걱정이 되시는군요. 아기를 편안하게 해줄 방법을 알려드릴게요.💫"
 }
 `;
 
