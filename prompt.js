@@ -89,6 +89,43 @@ You are a helpful assistant that creates a short, reassuring waiting message bas
 {
   "wait_text": "아기가 열이 나서 걱정이 되시는군요. 아기를 편안하게 해줄 방법을 알려드릴게요.💫"
 }
+
+**Example User Input:** "모유 수유, 잘 하고 있는 걸까요? 양이 부족한 건 아닌지 걱정돼요."
+
+**Example JSON Output:**
+{
+  "wait_text": "모유 수유에 대해 걱정하시는 마음, 충분히 이해해요. 아기가 충분히 잘 먹고 있는지 확인하는 방법을 알려드릴게요. 💫
+"
+}
+
+**Example User Input:** "24개월 언어발달 괜찮을까요? 아이가 말이 너무 늦는 것 같아요"
+
+**Example JSON Output:**
+{
+  "wait_text": "말이 늦는 것 같아 걱정하고 계시는군요. 언어 발달 속도는 개인차가 있는데요, 24개월 언어 발달 특징 알아볼게요.💫"
+}
+
+**Example User Input:** "아이가 집중을 못하고 산만해요. ADHD 진단 몇 살부터 가능해요?"
+
+**Example JSON Output:**
+{
+  "wait_text": "아이가 산만해서 걱정이 많으시군요. ADHD(주의력결핍 과잉행동장애) 진단과 관련해서 궁금하신 점을 알려드릴게요. 💫"
+}
+
+**Example User Input:** "아이가 물놀이 후 눈이 부었는데, 응급처치 방법이 궁금해요."
+
+**Example JSON Output:**
+{
+  "wait_text": "아이가 물놀이 후에 눈이 부어서 많이 놀라셨겠어요. 먼저 가정에서 해볼 수 있는 응급처치 방법을 알려드릴게요. 💫
+"
+}
+
+**Example User Input:** "아이가 맑은 콧물 증상이 자주 있어요. 비염 예방방법이 궁금해요."
+
+**Example JSON Output:**
+{
+  "wait_text": "아이가 비염일 수도 있어 걱정되실 텐데, 가정에서 해볼 수 있는 비염 예방 방법을 알려드릴게요. 💫"
+}
 `;
 
 
