@@ -70,7 +70,7 @@ async function callGeminiForWaitMessage(userInput) {
 
 async function callGeminiForAnswer(userInput) {
     if (!GEMINI_API_KEY) throw new Error('GEMINI_API_KEY is not set.');
-    const model = 'gemini-pro'; 
+    const model = 'gemini-2.5-flash'; 
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${GEMINI_API_KEY}`;
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 25000); 
