@@ -24,7 +24,7 @@ const qstashClient = new Client({
 
 async function callGeminiForWaitMessage(userInput) {
     if (!GEMINI_API_KEY) throw new Error('GEMINI_API_KEY is not set.');
-    const model = 'gemini-2.5-flash';
+    const model = 'gemini-2.5-flash-lite';
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${GEMINI_API_KEY}`;
     
     const controller = new AbortController();
